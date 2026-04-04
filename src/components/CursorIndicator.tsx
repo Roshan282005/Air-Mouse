@@ -6,13 +6,6 @@ interface CursorIndicatorProps {
   isClicking: boolean;
 }
 
-/**
- * CursorIndicator Component
- * 
- * Visual feedback for cursor position and state
- * Aurora-styled with glow effect
- */
-
 const CursorIndicator: React.FC<CursorIndicatorProps> = ({
   x,
   y,
@@ -20,34 +13,75 @@ const CursorIndicator: React.FC<CursorIndicatorProps> = ({
 }) => {
   return (
     <>
-      {/* Outer glow ring */}
+      {/* Outer aura glow - electric blue radial */}
       <div
-        className={`fixed w-12 h-12 rounded-full pointer-events-none transition-all duration-100 ${
-          isClicking ? 'bg-accent-cyan/40 scale-125' : 'bg-accent-cyan/20'
-        }`}
+        className="pointer-events-none"
         style={{
-          transform: `translate(${x - 24}px, ${y - 24}px)`,
-          boxShadow: `0 0 20px ${isClicking ? '#00d9ff' : '#00d9ff'}, 0 0 40px ${isClicking ? '#00d9ff' : 'transparent'}`,
+          position: 'fixed',
+          width: isClicking ? '64px' : '48px',
+          height: isClicking ? '64px' : '48px',
+          borderRadius: '50%',
+          zIndex: 1000,
+          background: `radial-gradient(circle at center,
+            rgba(184,238,255,${isClicking ? '0.6' : '0.4'}) 0%,
+            rgba(0,170,255,${isClicking ? '0.5' : '0.3'}) 30%,
+            rgba(0,51,170,${isClicking ? '0.3' : '0.2'}) 60%,
+            transparent 80%
+          )`,
+          filter: 'blur(8px)',
+          transform: `translate(${x - (isClicking ? 32 : 24)}px, ${y - (isClicking ? 32 : 24)}px)`,
+          transition: 'all 0.15s ease-out',
+          animation: 'auraPulse 2s infinite ease-in-out',
         }}
       />
 
-      {/* Inner dot */}
+      {/* Rotating ring */}
       <div
-        className={`fixed w-2 h-2 rounded-full pointer-events-none transition-all duration-100 ${
-          isClicking ? 'bg-white' : 'bg-accent-cyan'
-        }`}
+        className="pointer-events-none"
         style={{
-          transform: `translate(${x - 4}px, ${y - 4}px)`,
+          position: 'fixed',
+          width: '32px',
+          height: '32px',
+          borderRadius: '50%',
+          zIndex: 999,
+          border: `1.5px solid ${isClicking ? 'rgba(26,200,255,0.8)' : 'rgba(0,170,255,0.5)'}`,
+          transform: `translate(${x - 16}px, ${y - 16}px)`,
+          transition: 'all 0.1s ease-out',
+          animation: 'spinr 3s linear infinite',
+        }}
+      />
+
+      {/* Inner bright dot */}
+      <div
+        className="pointer-events-none"
+        style={{
+          position: 'fixed',
+          width: isClicking ? '12px' : '8px',
+          height: isClicking ? '12px' : '8px',
+          borderRadius: '50%',
+          zIndex: 1001,
+          background: `radial-gradient(circle, ${isClicking ? '#EEF8FF' : 'var(--arc-white)'} 0%, var(--arc-spark) 50%, transparent 100%)`,
+          transform: `translate(${x - (isClicking ? 6 : 4)}px, ${y - (isClicking ? 6 : 4)}px)`,
+          transition: 'all 0.05s ease-out',
+          boxShadow: isClicking
+            ? '0 0 12px rgba(238,248,255,0.9), 0 0 24px rgba(0,170,255,0.6)'
+            : '0 0 8px rgba(0,170,255,0.6)',
         }}
       />
 
       {/* Click pulse animation */}
       {isClicking && (
         <div
-          className="fixed w-12 h-12 rounded-full pointer-events-none animate-ping"
+          className="pointer-events-none"
           style={{
-            transform: `translate(${x - 24}px, ${y - 24}px)`,
-            backgroundColor: 'rgba(0, 217, 255, 0.5)',
+            position: 'fixed',
+            width: '64px',
+            height: '64px',
+            borderRadius: '50%',
+            zIndex: 998,
+            border: '2px solid rgba(0,170,255,0.5)',
+            transform: `translate(${x - 32}px, ${y - 32}px)`,
+            animation: 'clickPulse 0.6s ease-out forwards',
           }}
         />
       )}

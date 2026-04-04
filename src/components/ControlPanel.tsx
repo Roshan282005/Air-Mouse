@@ -5,17 +5,6 @@ interface ControlPanelProps {
   onClose: () => void;
 }
 
-/**
- * ControlPanel Component
- * 
- * Settings and controls for:
- * - Calibration
- * - Input sensitivity
- * - Face authentication
- * - Cloud sync toggle
- * - Data management
- */
-
 const ControlPanel: React.FC<ControlPanelProps> = ({ onClose }) => {
   const {
     faceAuthEnabled,
@@ -30,7 +19,6 @@ const ControlPanel: React.FC<ControlPanelProps> = ({ onClose }) => {
 
   const handleCalibrateGaze = () => {
     console.log('Starting gaze calibration...');
-    // TODO: Implement 5-point or 9-point calibration
     alert('Calibration flow would start here');
   };
 
@@ -44,32 +32,39 @@ const ControlPanel: React.FC<ControlPanelProps> = ({ onClose }) => {
 
   const tabs = {
     general: (
-      <div className="space-y-4">
-        <h3 className="font-semibold text-lg">General Settings</h3>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+        <h3 className="agent-name" style={{ fontSize: '15px' }}>General Settings</h3>
 
-        <label className="flex items-center space-x-2">
+        <label style={{ display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer' }}>
           <input
             type="checkbox"
             checked={faceAuthEnabled}
             onChange={(e) => setFaceAuthEnabled(e.target.checked)}
-            className="w-4 h-4"
+            style={{
+              accentColor: 'var(--arc-electric)',
+              width: '16px', height: '16px',
+            }}
           />
-          <span className="text-sm">Enable Face Authentication</span>
+          <span style={{ color: 'var(--arc-spark)', fontSize: '13px' }}>Enable Face Authentication</span>
         </label>
 
-        <label className="flex items-center space-x-2">
+        <label style={{ display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer' }}>
           <input
             type="checkbox"
             checked={enableCloudSync}
             onChange={(e) => setEnableCloudSync(e.target.checked)}
-            className="w-4 h-4"
+            style={{
+              accentColor: 'var(--arc-electric)',
+              width: '16px', height: '16px',
+            }}
           />
-          <span className="text-sm">Enable Cloud Sync (optional)</span>
+          <span style={{ color: 'var(--arc-spark)', fontSize: '13px' }}>Enable Cloud Sync (optional)</span>
         </label>
 
         <button
           onClick={handleCalibrateGaze}
-          className="w-full py-2 bg-accent-purple text-white rounded-lg text-sm font-semibold hover:bg-accent-purple/80 transition"
+          className="ui-btn ui-btn-primary"
+          style={{ width: '100%', padding: '10px', fontSize: '12px' }}
         >
           Calibrate Gaze Tracking
         </button>
@@ -77,15 +72,21 @@ const ControlPanel: React.FC<ControlPanelProps> = ({ onClose }) => {
     ),
 
     calibration: (
-      <div className="space-y-4">
-        <h3 className="font-semibold text-lg">Calibration</h3>
-        <div className="text-xs text-gray-400 space-y-2">
-          <p>X Offset: {calibrationData.calibrationOffsetX || 0}</p>
-          <p>Y Offset: {calibrationData.calibrationOffsetY || 0}</p>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+        <h3 className="agent-name" style={{ fontSize: '15px' }}>Calibration</h3>
+        <div style={{
+          fontSize: '12px',
+          color: 'rgba(128,216,255,0.45)',
+          fontFamily: "'JetBrains Mono', monospace",
+          display: 'flex', flexDirection: 'column', gap: '6px',
+        }}>
+          <p>X Offset: <span style={{ color: 'var(--arc-electric)' }}>{calibrationData.calibrationOffsetX || 0}</span></p>
+          <p>Y Offset: <span style={{ color: 'var(--arc-electric)' }}>{calibrationData.calibrationOffsetY || 0}</span></p>
         </div>
         <button
           onClick={handleCalibrateGaze}
-          className="w-full py-2 bg-accent-cyan text-slate-900 rounded-lg text-sm font-semibold hover:bg-cyan-400 transition"
+          className="ui-btn ui-btn-primary"
+          style={{ width: '100%', padding: '10px', fontSize: '12px' }}
         >
           Re-calibrate
         </button>
@@ -93,15 +94,35 @@ const ControlPanel: React.FC<ControlPanelProps> = ({ onClose }) => {
     ),
 
     privacy: (
-      <div className="space-y-4">
-        <h3 className="font-semibold text-lg">Privacy & Data</h3>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+        <h3 className="agent-name" style={{ fontSize: '15px' }}>Privacy & Data</h3>
         <button
           onClick={handleClearData}
-          className="w-full py-2 bg-red-500/50 text-white rounded-lg text-sm font-semibold hover:bg-red-600/50 transition"
+          style={{
+            width: '100%',
+            padding: '10px',
+            background: 'rgba(248,113,113,0.15)',
+            border: '1px solid rgba(248,113,113,0.3)',
+            borderRadius: '10px',
+            color: '#f87171',
+            fontSize: '12px',
+            fontWeight: 600,
+            cursor: 'pointer',
+            transition: 'all 0.2s',
+            fontFamily: "'Chakra Petch', sans-serif",
+          }}
+          onMouseEnter={(e) => {
+            (e.target as HTMLButtonElement).style.background = 'rgba(248,113,113,0.25)';
+            (e.target as HTMLButtonElement).style.boxShadow = '0 0 12px rgba(248,113,113,0.3)';
+          }}
+          onMouseLeave={(e) => {
+            (e.target as HTMLButtonElement).style.background = 'rgba(248,113,113,0.15)';
+            (e.target as HTMLButtonElement).style.boxShadow = 'none';
+          }}
         >
           Delete All Data
         </button>
-        <p className="text-xs text-gray-400">
+        <p style={{ fontSize: '11px', color: 'rgba(128,216,255,0.35)' }}>
           This will clear calibration data, face embeddings, and all settings.
         </p>
       </div>
@@ -109,18 +130,40 @@ const ControlPanel: React.FC<ControlPanelProps> = ({ onClose }) => {
   };
 
   return (
-    <div className="glass-dark p-6 rounded-2xl w-80 max-h-96 overflow-y-auto">
+    <div style={{
+      background: 'rgba(0, 10, 40, 0.90)',
+      border: '1px solid rgba(0, 170, 255, 0.18)',
+      borderRadius: '16px',
+      backdropFilter: 'blur(24px)',
+      padding: '20px',
+      width: '320px',
+      maxHeight: '420px',
+      overflowY: 'auto',
+      boxShadow: '0 0 40px rgba(0,170,255,0.15), 0 20px 60px rgba(0,0,0,0.6)',
+    }}>
       {/* Tab Navigation */}
-      <div className="flex gap-2 mb-4 border-b border-white/10 pb-3">
+      <div style={{
+        display: 'flex', gap: '6px', marginBottom: '16px',
+        paddingBottom: '12px',
+        borderBottom: '1px solid rgba(0,170,255,0.12)',
+      }}>
         {(['general', 'calibration', 'privacy'] as const).map((t) => (
           <button
             key={t}
             onClick={() => setTab(t)}
-            className={`text-xs font-semibold px-3 py-1 rounded transition ${
-              tab === t
-                ? 'bg-accent-cyan/30 text-accent-cyan'
-                : 'text-gray-400 hover:text-white'
-            }`}
+            style={{
+              fontSize: '10px',
+              fontWeight: 600,
+              padding: '4px 12px',
+              borderRadius: '8px',
+              transition: 'all 0.2s',
+              letterSpacing: '0.07em',
+              fontFamily: "'Chakra Petch', sans-serif",
+              cursor: 'pointer',
+              border: tab === t ? '1px solid rgba(0,170,255,0.3)' : '1px solid transparent',
+              background: tab === t ? 'rgba(0,170,255,0.12)' : 'transparent',
+              color: tab === t ? 'var(--arc-electric)' : 'rgba(128,216,255,0.4)',
+            }}
           >
             {t.charAt(0).toUpperCase() + t.slice(1)}
           </button>
@@ -133,7 +176,8 @@ const ControlPanel: React.FC<ControlPanelProps> = ({ onClose }) => {
       {/* Close Button */}
       <button
         onClick={onClose}
-        className="mt-6 w-full py-2 bg-white/10 text-white rounded-lg text-sm font-semibold hover:bg-white/20 transition"
+        className="ui-btn"
+        style={{ marginTop: '20px', width: '100%', padding: '10px', fontSize: '12px' }}
       >
         Close
       </button>
